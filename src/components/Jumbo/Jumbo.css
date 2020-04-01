@@ -1,0 +1,11 @@
+.jumboContainer {
+    margin: 10px;
+}
+
+#showMore {
+    text-align: center;
+}
+
+.subjectName:hover {
+    background-color: #f9f9f9;
+}

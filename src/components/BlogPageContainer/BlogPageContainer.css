@@ -1,0 +1,8 @@
+.carousel-container {
+    margin-bottom: 100px;
+}
+
+.react-multi-carousel-item {
+    display: flex;
+    justify-content: center;
+}
