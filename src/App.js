@@ -7,6 +7,8 @@ import Blog from "./components/Blog/Blog";
 import constants from "./Constants";
 import {Spinner} from "react-bootstrap";
 import {Helmet} from "react-helmet";
+import SearchBar from "./components/SearchBar/SearchBar";
+import About from "./components/About/about";
 
 class App extends Component {
     render() {
@@ -14,8 +16,8 @@ class App extends Component {
             return (
                 <div>
                     <Helmet>
-                        <title>Mechanical Eng and Computer Science and Eng</title>
-                        <meta name="description" content="An engaging, well written, uncomplicated and accurate source of knowledge in Mechanical Engineering and Computer Science and Engineering"/>
+                        <title>Cloud, Golang and Software Development</title>
+                        <meta name="description" content="This site has posts which discusses general topics and solves problems related to Cloud, Golang and general Software Development stuff"/>
                     </Helmet>
                     <Spinner animation={"border"}/>
                 </div>
@@ -24,16 +26,24 @@ class App extends Component {
         return (
             <div className="App">
                 <Helmet>
-                    <title>Mechanical Eng and Computer Science and Eng</title>
-                    <meta name="description" content="An engaging, well written, uncomplicated and accurate source of knowledge in Mechanical Engineering and Computer Science and Engineering"/>
+                    <title>Amazon Web Services, Golang/Go and Software Development</title>
+                    <meta name="description" content="This site has posts which discusses general topics and solves problems related to Amazon Web Services, Golang/Go and Software Development. Come on in!"/>
                 </Helmet>
                 <BrowserRouter>
                     <MainNavbar/>
+                    <SearchBar/>
                     <Switch>
                     <Route exact path="/" component={Home}/>
+                    <Route exact path="/about" component={About} />
                     <Route exact path="/:course/:subject" component={Blog}/>
                     <Route exact path="/:course/:subject/:blog" component={Blog}/>
-                    <Redirect to={"/"} from="*"/>
+                    <Route path="*" component={() => {
+                        return (
+                            <div>
+                                <h1>404 Page Not Found</h1>
+                            </div>
+                        );
+                    }}/>
                     </Switch>
                     <Footer />
                 </BrowserRouter>

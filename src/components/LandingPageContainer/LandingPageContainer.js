@@ -13,17 +13,29 @@ class LandingPageContainer extends Component {
     };
 
     componentDidMount() {
-        axios.get(`${constants.serverURL}/blog`)
-            .then(data => {
-                this.setState({blogsList: data.data})
-            })
+        if(this.props.query.length > 0) {
+            axios.get(`${constants.serverURL}/search?s=${this.props.query}`)
+                .then(data => {
+                    this.setState({blogsList: data.data})
+                })
+        }else {
+            axios.get(`${constants.serverURL}/blog`)
+                .then(data => {
+                    this.setState({blogsList: data.data})
+                })
+        }
     }
 
     createSubContainer = (blogs) => {
         let cards = blogs.map(b => {
             return (
-                <Card key={b._id} style={{ width: '15rem', margin: '15px', borderRadius: "5px"}} className="col-lg-3 col-sm-5">
-                    <Card.Img variant="top" style={{width: "auto", height: "200px"}} alt={b.permaLink} src={b.posterPicture} />
+                <Card key={b._id} style={{ width: '250px',
+                    borderRadius: "5px",
+                    border: "0px",
+                    padding: "unset",
+                    margin: "10px",
+                    boxShadow: "0px 0px 11px -1px rgba(43,43,43,0.5)"}}>
+                    <Card.Img variant="top" style={{width: "250px", height: "250px"}} alt={b.permaLink} src={b.posterPicture} />
                     <Card.Body>
                         <Card.Title>{b.title.substring(0,50)}...</Card.Title>
                         <Card.Text>{b.description.substring(0,100)}...</Card.Text>
@@ -32,10 +44,15 @@ class LandingPageContainer extends Component {
                 </Card>
             );
         });
+
+        let containerHeading = "Search Results";
+        if(blogs && blogs.length > 0 && this.props.query.length <= 0) {
+            containerHeading =  blogs[0].subject.name;
+        }
         return (
-            <div className="blogsContainer container">
-                <h1>{_.startCase(blogs[0].subject.name)}</h1>
-                <div className="row justify-content-lg-between justify-content-sm-center justify-content-center">
+            <div key={containerHeading} className="blogsContainer container">
+                <h1>{_.startCase(containerHeading)}</h1>
+                <div className="row justify-content-md-start justify-content-center">
                     {cards}
                 </div>
             </div>

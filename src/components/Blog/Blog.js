@@ -105,7 +105,7 @@ class Blog extends Component {
     render() {
         if(!this.state.error && this.state.blogsList && this.state.blogsList.length > 0) {
             return (
-                <div style={{marginBottom: "50px"}}>
+                <div style={{margin: "50px 0"}}>
                     <Helmet>
                         <title>{this.state.blogsList[this.state.selectedBlogIndex].title}</title>
                         <meta name="description" content={this.state.blogsList[this.state.selectedBlogIndex].description}/>
@@ -117,7 +117,7 @@ class Blog extends Component {
                             </ListGroup>
                         </Menu>
                     </div>
-                    <div className="container blogContent col-lg-5" ref={this.blogContentRef} />
+                    <div className="container blogContent col-lg-5" ref={this.blogContentRef} style={{backgroundColor: "white"}}/>
                     <div>
                         <BlogPageContainer blogs={this.state.blogsList} currentBlogIndex={this.state.selectedBlogIndex} history={this.props.history}/>
                     </div>

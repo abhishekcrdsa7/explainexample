@@ -15,14 +15,21 @@ class BlogPageContainer extends Component {
             this.props.blogs.forEach(b => {
             if(!(this.props.currentBlogIndex === b.blogNumber - 1)) {
                 a.push((
-                    <Card key={b._id} style={{ width: '20rem' }}>
-                        <Card.Img variant="top" style={{width: "auto", height: "250px"}} alt={b.permaLink} src={b.posterPicture} />
+                    <Card key={b._id} style={{ width: '250px',
+                        borderRadius: "5px",
+                        border: "0px",
+                        padding: "unset",
+                        margin: "5px",
+                        boxShadow: "0px 0px 11px -1px rgba(43,43,43,0.5)"}}>
+                        <Card.Img variant="top" style={{width: "250px", height: "250px"}} alt={b.permaLink} src={b.posterPicture} />
                         <Card.Body>
-                            <Card.Title>{b.title.substring(0,40)}...</Card.Title>
+                            <Card.Title>{b.title.substring(0,50)}...</Card.Title>
                             <Card.Text>{b.description.substring(0,100)}...</Card.Text>
-                            <Link to={`/${b.coursePermaLink}/${b.subjectPermaLink}/${b.permaLink}`} style={{position: "absolute", bottom: "10px", right: "25px"}}>Read More</Link>
+                            <Link to={`/${b.coursePermaLink}/${b.subjectPermaLink}/${b.permaLink}`} style={{position: "absolute", bottom: "10px", right: "25px"}} onClick={() => {
+                             window.scrollTo(0, 0)
+                            }}>Read More</Link>
                         </Card.Body>
-                    </Card>
+                </Card>
                 ));
             }
         });
@@ -48,16 +55,18 @@ class BlogPageContainer extends Component {
             },
         };
         return (
-            <Carousel
-                swipeable={false}
-                responsive={responsive}
-                keyBoardControl={true}
-                infinite={true}
-                containerClass="carousel-container container"
-                itemClass="carousel-item-padding-40-px"
-            >
-                {this.carouselItems()}
-            </Carousel>
+            <div>
+                <h3 style={{textAlign: "center"}}>Posts you may like</h3>
+                <Carousel
+                    swipeable={false}
+                    responsive={responsive}
+                    keyBoardControl={true}
+                    containerClass="carousel-container container"
+                    itemClass="carousel-item-padding-40-px"
+                >
+                    {this.carouselItems()}
+                </Carousel>
+            </div>
         );
     }
 }
