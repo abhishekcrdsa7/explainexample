@@ -12,21 +12,21 @@
 /* Position and sizing of burger button */
 .bm-burger-button {
     position: fixed;
-    width: 30px;
-    height: 20px;
+    /*width: 30px;*/
+    /*height: 20px;*/
     left: 10px;
     top: 15px;
 }
 
-/* Color/shape of burger icon bars */
-.bm-burger-bars {
-    background: #007bff;
-}
+/*!* Color/shape of burger icon bars *!*/
+/*.bm-burger-bars {*/
+/*    background: #007bff;*/
+/*}*/
 
-/* Color/shape of burger icon bars on hover*/
-.bm-burger-bars-hover {
-    background: #64ccff;
-}
+/*!* Color/shape of burger icon bars on hover*!*/
+/*.bm-burger-bars-hover {*/
+/*    background: #64ccff;*/
+/*}*/
 
 /* Position and sizing of clickable cross button */
 .bm-cross-button {
@@ -46,12 +46,13 @@ Note: Beware of modifying this element as it can break the animations - you shou
 .bm-menu-wrap {
     position: fixed;
     height: 100%;
+    top: 15vh;
 }
 
 /* General sidebar styles */
 .bm-menu {
     background: #f8f9fa;
-    padding-top: 40px;
+    padding-top: 5vh;
     font-size: 1.15em;
 }
 

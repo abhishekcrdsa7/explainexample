@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import {withRouter} from "react-router-dom";
-import {ListGroup, Spinner} from "react-bootstrap";
+import {ListGroup, Spinner, Button, InputGroup, FormControl, Form} from "react-bootstrap";
 import {slide as Menu} from "react-burger-menu";
 import axios from "axios";
 import {Helmet} from "react-helmet";
@@ -18,7 +18,9 @@ class Blog extends Component {
         blogsList: [],
         blogContent: "",
         selectedBlogIndex: -1,
-        error: ""
+        error: "",
+        email: "",
+        subscribeMsg: ""
     };
 
     componentDidMount() {
@@ -102,6 +104,24 @@ class Blog extends Component {
         }
     };
 
+    submitEmail = (e) => {
+        e.preventDefault();
+        this.setState({subscribeMsg: ""});
+        axios.post(`${constants.serverURL}/subscribe`, {
+            email: this.state.email
+        })
+            .then((data) => {
+                if(data.data.code === 11000) {
+                    this.setState({subscribeMsg: "You are already registered!"})
+                } else {
+                    this.setState({subscribeMsg: "Thank you for subscribing!"})
+                }
+            })
+            .catch(() => {
+                this.setState({subscribeMsg: "Sorry, an error occurred. Please try again :)"})
+            });
+    };
+
     render() {
         if(!this.state.error && this.state.blogsList && this.state.blogsList.length > 0) {
             return (
@@ -111,13 +131,60 @@ class Blog extends Component {
                         <meta name="description" content={this.state.blogsList[this.state.selectedBlogIndex].description}/>
                     </Helmet>
                     <div style={{padding: 0}}>
-                        <Menu noOverlay>
-                            <ListGroup>
+                        <Menu
+                            noOverlay
+                            customBurgerIcon={
+                                <Button
+                                    size="sm"
+                                    variant="dark"
+                                >
+                                    Posts
+                                </Button>
+                            }
+                        >
+                            <ListGroup
+                                style={{
+                                    height: "80vh",
+                                    overflowY: "scroll"
+                                }}
+                            >
                                 {this.generateBlogsList()}
                             </ListGroup>
                         </Menu>
                     </div>
-                    <div className="container blogContent col-lg-5" ref={this.blogContentRef} style={{backgroundColor: "white"}}/>
+                    <div>
+                        <div className="justify-content-center" style={{display: "flex"}}>
+                            <div className="col-lg-5 col-md-8 overflow-auto" ref={this.blogContentRef} style={{backgroundColor: "white"}}/>
+                        </div>
+                        <div className="justify-content-center" style={{display: "flex"}}>
+                            <div className="col-lg-3 col-md-6 m-1 p-1"
+                                 style={{
+                                     border: "1px solid #ddd",
+                                     borderRadius: "3px"}}>
+                                <h5 className="text-center">
+                                    Subscribe
+                                </h5>
+                                <small className="text-primary">{this.state.subscribeMsg}</small>
+                                <Form onSubmit={this.submitEmail}>
+                                    <InputGroup>
+                                        <FormControl
+                                            placeholder="Enter your email"
+                                            type="email"
+                                            required
+                                            onChange={(e) => {
+                                                this.setState({email: e.target.value});
+                                            }}
+                                            value={this.state.email}
+                                        />
+                                        <InputGroup.Append>
+                                            <Button variant="primary" type="submit">Subscribe</Button>
+                                        </InputGroup.Append>
+                                    </InputGroup>
+                                    <small className="text-muted"><em>Subscribe to my newsletter</em></small>
+                                </Form>
+                            </div>
+                        </div>
+                    </div>
                     <div>
                         <BlogPageContainer blogs={this.state.blogsList} currentBlogIndex={this.state.selectedBlogIndex} history={this.props.history}/>
                     </div>

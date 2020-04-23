@@ -1,8 +1,7 @@
 import React, {Component} from 'react';
 import MainNavbar from "./components/MainNavbar/MainNavbar";
 import Home from "./components/Home/Home";
-import {BrowserRouter, Route, Redirect, Switch} from "react-router-dom";
-import Footer from "./components/Footer/Footer";
+import {BrowserRouter, Route, Switch} from "react-router-dom";
 import Blog from "./components/Blog/Blog";
 import constants from "./Constants";
 import {Spinner} from "react-bootstrap";
@@ -16,8 +15,8 @@ class App extends Component {
             return (
                 <div>
                     <Helmet>
-                        <title>Cloud, Golang and Software Development</title>
-                        <meta name="description" content="This site has posts which discusses general topics and solves problems related to Cloud, Golang and general Software Development stuff"/>
+                        <title>Amazon Web Services, Golang/Go and Software Development</title>
+                        <meta name="description" content="This site has posts which discusses general topics and solves problems related to Amazon Web Services, Golang/Go and Software Development. Come on in!"/>
                     </Helmet>
                     <Spinner animation={"border"}/>
                 </div>
@@ -45,7 +44,6 @@ class App extends Component {
                         );
                     }}/>
                     </Switch>
-                    <Footer />
                 </BrowserRouter>
             </div>
         );
