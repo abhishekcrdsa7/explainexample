@@ -1,10 +1,19 @@
 import React, { Component } from "react";
 import {Card} from "react-bootstrap";
+import {Helmet} from "react-helmet";
+import ReactGA from "react-ga";
 
 class About extends Component {
+    componentDidMount() {
+        ReactGA.pageview(window.location.pathname  + window.location.search);
+    }
     render() {
         return (
             <div className="container" style={{marginBottom: "100px"}}>
+                <Helmet>
+                    <title>About Me</title>
+                    <meta name="description" content="My name is Abhishek Sharma. Currently, I am pursuing undergraduate course in Computer Science and Engineering. I am an AWS Certified Solutions Architect - Associate."/>
+                </Helmet>
                 <Card className="row" style={{
                     borderRadius: "5px",
                     border: "0px",
@@ -24,9 +33,8 @@ class About extends Component {
                         <Card.Title>About Me</Card.Title>
                         <Card.Text>{
                             <div>
-                            My name is Abhishek Sharma. Currently, I am pursuing undergraduate course in Computer Science and Engineering.
-                            I spend most of my time watching football (soccer) and developing this website and obviously my college studies. I am an AWS Certified Solutions Architect - Associate.
-                            And through this website I share my knowledge with you people. You can expect the blogs related to Cloud, Kubernetes and general Computer Science stuff on this website.
+                            My name is Abhishek Sharma. Currently, I am pursuing undergraduate course in Computer Science and Engineering. I am an AWS Certified Solutions Architect - Associate.
+                            I have developed this website with my goal to make AWS and Cloud Computing easy to learn. On this website, you can expect the blog posts related to Amazon Web Services, Cloud Computing and general Software Development stuff.
                             <br/>
                             <strong>AWS Credential: GZ6H4Q1CPF1EQZGJ</strong>
                             </div>

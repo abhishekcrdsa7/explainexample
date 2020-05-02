@@ -1,12 +1,16 @@
 import React, { Component } from "react";
 import {withRouter} from "react-router-dom";
-import {ListGroup, Spinner, Button, InputGroup, FormControl, Form} from "react-bootstrap";
+import {ListGroup, Spinner, Button} from "react-bootstrap";
 import {slide as Menu} from "react-burger-menu";
 import axios from "axios";
 import {Helmet} from "react-helmet";
 import constants from "../../Constants";
 import "./Blog.css";
 import BlogPageContainer from "../BlogPageContainer/BlogPageContainer";
+import SearchBar from "../SearchBar/SearchBar";
+import Subscribe from "../Subscribe/Subscribe";
+import Signoff from "../Signoff/Signoff";
+import ReactGA from "react-ga";
 
 class Blog extends Component {
     constructor(props) {
@@ -18,9 +22,7 @@ class Blog extends Component {
         blogsList: [],
         blogContent: "",
         selectedBlogIndex: -1,
-        error: "",
-        email: "",
-        subscribeMsg: ""
+        error: ""
     };
 
     componentDidMount() {
@@ -104,26 +106,23 @@ class Blog extends Component {
         }
     };
 
-    submitEmail = (e) => {
-        e.preventDefault();
-        this.setState({subscribeMsg: ""});
-        axios.post(`${constants.serverURL}/subscribe`, {
-            email: this.state.email
-        })
-            .then((data) => {
-                if(data.data.code === 11000) {
-                    this.setState({subscribeMsg: "You are already registered!"})
-                } else {
-                    this.setState({subscribeMsg: "Thank you for subscribing!"})
-                }
-            })
-            .catch(() => {
-                this.setState({subscribeMsg: "Sorry, an error occurred. Please try again :)"})
-            });
+    popularPosts = () => {
+        const arr = [
+            <a className="d-block" target="_blank" href="/computers/aws/best-aws-courses-for-beginners-hear-from-aws-solutions-architect">Best AWS Courses for Beginners - Definitive Guide</a>,
+            <a className="d-block" target="_blank" href="/computers/aws/aws-cloud-practitioner-courses">Best AWS Certified Cloud Practitioner Course</a>,
+            <a className="d-block" target="_blank" href="/computers/aws/best-courses-aws-certified-solutions-architect-professional">Best AWS Certified Solutions Architect Professional Course</a>
+        ];
+        return (
+            <div className="p-2">
+                {arr}
+            </div>
+        );
     };
 
     render() {
+        ReactGA.pageview(window.location.pathname  + window.location.search);
         if(!this.state.error && this.state.blogsList && this.state.blogsList.length > 0) {
+
             return (
                 <div style={{margin: "50px 0"}}>
                     <Helmet>
@@ -152,49 +151,36 @@ class Blog extends Component {
                             </ListGroup>
                         </Menu>
                     </div>
-                    <div>
-                        <div className="justify-content-center" style={{display: "flex"}}>
-                            <div className="col-lg-5 col-md-8 overflow-auto" ref={this.blogContentRef} style={{backgroundColor: "white"}}/>
+                    <SearchBar/>
+                    <div className="row mb-5 pl-2 pr-1">
+                        <div className="offset-md-1 offset-lg-3 col-lg-5 col-md-8 overflow-auto pt-2">
+                            <Signoff />
+                            <div className="mt-2" ref={this.blogContentRef}/>
                         </div>
-                        <div className="justify-content-center" style={{display: "flex"}}>
-                            <div className="col-lg-3 col-md-6 m-1 p-1"
-                                 style={{
-                                     border: "1px solid #ddd",
-                                     borderRadius: "3px"}}>
-                                <h5 className="text-center">
-                                    Subscribe
-                                </h5>
-                                <small className="text-primary">{this.state.subscribeMsg}</small>
-                                <Form onSubmit={this.submitEmail}>
-                                    <InputGroup>
-                                        <FormControl
-                                            placeholder="Enter your email"
-                                            type="email"
-                                            required
-                                            onChange={(e) => {
-                                                this.setState({email: e.target.value});
-                                            }}
-                                            value={this.state.email}
-                                        />
-                                        <InputGroup.Append>
-                                            <Button variant="primary" type="submit">Subscribe</Button>
-                                        </InputGroup.Append>
-                                    </InputGroup>
-                                    <small className="text-muted"><em>Subscribe to my newsletter</em></small>
-                                </Form>
+                        <div className="d-none d-lg-block col-lg-3 pt-2">
+                            <div className="position-absolute" style={{top: "40%"}}>
+                                <div className="mb-5"  style={{backgroundColor: "#f1f1f1"}}>
+                                    <h5 className="text-center">AWS Best Courses</h5>
+                                    {this.popularPosts()}
+                                </div>
+                                <h5 className="text-center">Want to gain more knowledge for free?</h5>
+                                <Subscribe />
                             </div>
                         </div>
                     </div>
-                    <div>
+                    <h3 className="text-center">Want to gain more knowledge for free?</h3>
+                    <Subscribe />
+                    <div className="d-flex justify-content-center">
                         <BlogPageContainer blogs={this.state.blogsList} currentBlogIndex={this.state.selectedBlogIndex} history={this.props.history}/>
                     </div>
                 </div>
             );
         } else {
             return (
-                <div style={{marginBottom: "50px"}}>
+                <div className="mb-5">
+                    <SearchBar/>
                     {
-                        this.state.error ? <h4 style={{textAlign: "center"}}>{this.state.error}</h4> : null
+                        this.state.error ? <h4 className="text-center">{this.state.error}</h4> : null
                     }
                     <Spinner animation="border"/>
                 </div>

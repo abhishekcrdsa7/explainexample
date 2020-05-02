@@ -5,6 +5,7 @@ import constants from "../../Constants";
 import {Card, Spinner} from "react-bootstrap";
 import _ from "lodash";
 import "./LandingPageContainer.css";
+import ReactGA from "react-ga";
 
 class LandingPageContainer extends Component {
 
@@ -14,14 +15,20 @@ class LandingPageContainer extends Component {
 
     componentDidMount() {
         if(this.props.query.length > 0) {
+            ReactGA.pageview(window.location.pathname  + window.location.search);
             axios.get(`${constants.serverURL}/search?s=${this.props.query}`)
                 .then(data => {
                     this.setState({blogsList: data.data})
                 })
         }else {
+            ReactGA.pageview(window.location.pathname  + window.location.search);
             axios.get(`${constants.serverURL}/blog`)
                 .then(data => {
-                    this.setState({blogsList: data.data})
+                    let blogsList = {};
+                    blogsList["amazon web services"] = data.data["amazon web services"];
+                    blogsList["golang"] = data.data["golang"];
+                    blogsList["miscellaneous"] = data.data["miscellaneous"];
+                    this.setState({blogsList})
                 })
         }
     }
@@ -29,7 +36,8 @@ class LandingPageContainer extends Component {
     createSubContainer = (blogs) => {
         let cards = blogs.map(b => {
             return (
-                <Card key={b._id} style={{ width: '250px',
+                <Card key={b._id} style={{
+                    width: '250px',
                     borderRadius: "5px",
                     border: "0px",
                     padding: "unset",

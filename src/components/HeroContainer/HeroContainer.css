@@ -1,0 +1,5 @@
+.heroContainer {
+    height: 20rem;
+    background-image: url("https://explainexampleimages.s3.ap-south-1.amazonaws.com/posterPictures/containerImage.png");
+    color: #fff;
+}

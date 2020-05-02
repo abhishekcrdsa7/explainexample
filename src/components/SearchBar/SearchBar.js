@@ -17,9 +17,10 @@ class SearchBar extends Component{
     render() {
         return (
             <div className="container col-lg-5">
-                <InputGroup style={{margin: "20px 0"}}>
+                <InputGroup style={{padding: "20px 0"}}>
                     <FormControl
-                        placeholder="Search Website"
+                        placeholder="Try searching 'Best AWS Courses'"
+                        required={true}
                         onChange={(e) => {
                             this.setState({s: e.target.value});
                         }}
