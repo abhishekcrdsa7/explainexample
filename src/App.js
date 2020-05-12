@@ -6,26 +6,20 @@ import Blog from "./components/Blog/Blog";
 import constants from "./Constants";
 import {Spinner} from "react-bootstrap";
 import {Helmet} from "react-helmet";
-import { createBrowserHistory } from 'history';
 import ReactGA from "react-ga";
 import About from "./components/About/about";
 import NoIndex from "./components/NoIndex";
 
 const trackingId = "UA-161844295-1";
 ReactGA.initialize(trackingId);
-const history = createBrowserHistory();
-history.listen(location => {
-    ReactGA.set({page: location.pathname});
-    ReactGA.pageview(location.pathname  + location.search);
-});
 
 class App extends Component {
 
     redirectRoutes = () => {
       let routes = [
           <Route key={0} exact path="/computers/golang/golang-slice-remove-element-by-value-all-in-one-guide" component={NoIndex}/>,
-          <Route key={1} exact path="/golang/golang-slice-remove-element-by-value-all-in-one-guide" component={NoIndex}/>,
-          <Route key={2} exact path="/mech-eng/thermodynamics/basic-thermodynamics-mechanical-engineers-point-of-view" component={NoIndex}/>
+          <Route key={1} exact path="/mech-eng/thermodynamics/basic-thermodynamics-mechanical-engineers-point-of-view" component={NoIndex}/>,
+          <Route key={2} exact path="/computers/misc/dont-like-coding-earn-more-than-software-developer" component={NoIndex}/>
       ];
       return routes;
     };
@@ -48,7 +42,7 @@ class App extends Component {
                     <title>Explain Example</title>
                     <meta name="description" content="The mission of this website is to make AWS easy to learn by providing various resources and solutions to all the people around the world whose goals align with the ambitions of this website"/>
                 </Helmet>
-                <BrowserRouter history={history}>
+                <BrowserRouter>
                     <MainNavbar/>
                     <Switch>
                         {this.redirectRoutes()}

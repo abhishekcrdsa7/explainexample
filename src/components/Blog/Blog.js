@@ -11,6 +11,14 @@ import SearchBar from "../SearchBar/SearchBar";
 import Subscribe from "../Subscribe/Subscribe";
 import Signoff from "../Signoff/Signoff";
 import ReactGA from "react-ga";
+import {
+    LinkedinIcon,
+    LinkedinShareButton,
+    RedditIcon,
+    RedditShareButton,
+    TwitterIcon,
+    TwitterShareButton
+} from "react-share";
 
 class Blog extends Component {
     constructor(props) {
@@ -51,13 +59,12 @@ class Blog extends Component {
                         if(!blog[0]) {
                             this.setState({error: "Oops! Something went wrong..."});
                         } else {
-                            this.setState({ blogContent: blog.content, selectedBlogIndex: blog.blogNumber - 1});
+                            this.setState({
+                                blogsList: data.data,
+                                blogContent: blog[0].content,
+                                selectedBlogIndex: blog[0].blogNumber - 1
+                            });
                         }
-                        this.setState({
-                            blogsList: data.data,
-                            blogContent: blog[0].content,
-                            selectedBlogIndex: blog[0].blogNumber - 1
-                        })
                     }
                 })
                 .catch(console.log)
@@ -68,6 +75,9 @@ class Blog extends Component {
         return this.state.blogsList.map((b, i) => {
             if(this.state.selectedBlogIndex === i) {
                 return <ListGroup.Item className="blogListItem" style={{borderRadius: 0}} key={b._id} as="li" active>{b.title}</ListGroup.Item>;
+            }
+            if(!b.publish) {
+                return null;
             }
             return <ListGroup.Item
                 key={b._id}
@@ -102,16 +112,27 @@ class Blog extends Component {
 
     blogContent = () => {
         if(this.blogContentRef.current) {
+            ReactGA.pageview(window.location.pathname  + window.location.search);
             this.blogContentRef.current.innerHTML = this.state.blogContent;
         }
     };
 
     popularPosts = () => {
-        const arr = [
-            <a className="d-block" target="_blank" href="/computers/aws/best-aws-courses-for-beginners-hear-from-aws-solutions-architect">Best AWS Courses for Beginners - Definitive Guide</a>,
-            <a className="d-block" target="_blank" href="/computers/aws/aws-cloud-practitioner-courses">Best AWS Certified Cloud Practitioner Course</a>,
-            <a className="d-block" target="_blank" href="/computers/aws/best-courses-aws-certified-solutions-architect-professional">Best AWS Certified Solutions Architect Professional Course</a>
-        ];
+        let i = Math.floor(Math.random() * this.state.blogsList.length - 5);
+        if(i < 0) {
+            i = 0;
+        }
+        let arr = [];
+        for(let j = i; j < i+5 && j < this.state.blogsList.length; j++) {
+            if(j === this.state.selectedBlogIndex || !this.state.blogsList[j].publish) continue;
+            let b = this.state.blogsList[j];
+            arr.push((
+                <div className="p-2 m-2 d-flex" style={{border: "1px solid #ddd", height: "6rem", borderRadius: "5px" }}>
+                    <img src={b.posterPicture} alt={b.title} style={{height: "5rem", width: "5rem", marginRight: "5px"}}/>
+                    <a className="d-block mb-2" target="_blank" href={`/${b.coursePermaLink}/${b.subjectPermaLink}/${b.permaLink}`}>{b.title.substring(0, 57)}...</a>
+                </div>
+            ));
+        }
         return (
             <div className="p-2">
                 {arr}
@@ -120,9 +141,9 @@ class Blog extends Component {
     };
 
     render() {
-        ReactGA.pageview(window.location.pathname  + window.location.search);
         if(!this.state.error && this.state.blogsList && this.state.blogsList.length > 0) {
-
+            let b = this.state.blogsList[this.state.selectedBlogIndex];
+            let shareURL = `${constants.selfURL}/${b.coursePermaLink}/${b.subjectPermaLink}/${b.permaLink}`;
             return (
                 <div style={{margin: "50px 0"}}>
                     <Helmet>
@@ -152,24 +173,63 @@ class Blog extends Component {
                         </Menu>
                     </div>
                     <SearchBar/>
-                    <div className="row mb-5 pl-2 pr-1">
-                        <div className="offset-md-1 offset-lg-3 col-lg-5 col-md-8 overflow-auto pt-2">
+                    <div className="d-flex">
+                            <div className="d-none d-md-block col-md-2">
+                                <div className="position-absolute" style={{top: "35%"}}>
+                                    <h5 className="w-100 text-center">Share this post</h5>
+                                    <div>
+                                        <LinkedinShareButton url={shareURL}>
+                                            <LinkedinIcon size={50} round={true}/>
+                                        </LinkedinShareButton>
+                                        <RedditShareButton url={shareURL}>
+                                            <RedditIcon size={50} round={true}/>
+                                        </RedditShareButton>
+                                        <TwitterShareButton url={shareURL}>
+                                            <TwitterIcon size={50} round={true}/>
+                                        </TwitterShareButton>
+                                    </div>
+                                </div>
+                            </div>
+                        <div className="offset-md-1 col-lg-5 col-md-8 overflow-auto pt-2">
                             <Signoff />
                             <div className="mt-2" ref={this.blogContentRef}/>
-                        </div>
-                        <div className="d-none d-lg-block col-lg-3 pt-2">
-                            <div className="position-absolute" style={{top: "40%"}}>
-                                <div className="mb-5"  style={{backgroundColor: "#f1f1f1"}}>
-                                    <h5 className="text-center">AWS Best Courses</h5>
-                                    {this.popularPosts()}
+                            <div>
+                                <h5>Share this post</h5>
+                                <div>
+                                    <LinkedinShareButton url={shareURL}>
+                                        <LinkedinIcon size={32} round={true}/>
+                                    </LinkedinShareButton>
+                                    <RedditShareButton url={shareURL}>
+                                        <RedditIcon size={32} round={true}/>
+                                    </RedditShareButton>
+                                    <TwitterShareButton url={shareURL}>
+                                        <TwitterIcon size={32} round={true}/>
+                                    </TwitterShareButton>
                                 </div>
+                            </div>
+                        </div>
+                        <div className="d-none d-lg-block col-lg-4 pt-2">
+                            <div className="position-absolute" style={{top: "40%"}}>
+                                {
+                                    this.state.blogsList.length > 1 ?
+                                        (
+                                            <div className="p-1"  style={{ marginBottom: "4rem"}}>
+                                                <h5 className="text-center">Blog Posts Worth Your Attention</h5>
+                                                {this.popularPosts()}
+                                            </div>
+                                        ) : null
+                                }
                                 <h5 className="text-center">Want to gain more knowledge for free?</h5>
                                 <Subscribe />
                             </div>
                         </div>
                     </div>
-                    <h3 className="text-center">Want to gain more knowledge for free?</h3>
-                    <Subscribe />
+                    <div className="mt-5">
+                        <h3 className="text-center">Want to gain more knowledge for free?</h3>
+                        <div className="p-1">
+                            <Subscribe />
+                        </div>
+                    </div>
                     <div className="d-flex justify-content-center">
                         <BlogPageContainer blogs={this.state.blogsList} currentBlogIndex={this.state.selectedBlogIndex} history={this.props.history}/>
                     </div>

@@ -1,5 +1,6 @@
 const constants = {
-    serverURL: ""
+    serverURL: "https://api.explainexample.com",
+    selfURL: "https://explainexample.com"
 };
 
 export default constants;

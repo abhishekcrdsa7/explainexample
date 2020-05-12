@@ -1,6 +1,5 @@
 import React, {Component} from "react";
 import {Card} from "react-bootstrap";
-import {Link} from "react-router-dom";
 
 class BlogPageContainer extends Component {
 
@@ -10,7 +9,7 @@ class BlogPageContainer extends Component {
         }
         let a = [];
             this.props.blogs.forEach(b => {
-            if(!(this.props.currentBlogIndex === b.blogNumber - 1)) {
+            if(this.props.currentBlogIndex !== b.blogNumber - 1 && b.publish) {
                 a.push((
                     <div className="col-lg-12">
                         <Card className="mt-2" key={b._id} style={{
@@ -20,9 +19,7 @@ class BlogPageContainer extends Component {
                             <Card.Body>
                                 <Card.Title>{b.title.substring(0,70)}...</Card.Title>
                                 <Card.Text>{b.description.substring(0,100)}...</Card.Text>
-                                <Link to={`/${b.coursePermaLink}/${b.subjectPermaLink}/${b.permaLink}`} style={{position: "absolute", bottom: "10px", right: "25px"}} onClick={() => {
-                                    window.scrollTo(0, 0)
-                                }}>Read More</Link>
+                                <a href={`/${b.coursePermaLink}/${b.subjectPermaLink}/${b.permaLink}`} style={{position: "absolute", bottom: "10px", right: "25px"}}>Read More</a>
                             </Card.Body>
                         </Card>
                     </div>

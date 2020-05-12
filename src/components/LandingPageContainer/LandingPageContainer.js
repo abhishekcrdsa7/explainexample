@@ -1,6 +1,5 @@
 import React, { Component } from "react";
 import axios from "axios";
-import {Link} from "react-router-dom";
 import constants from "../../Constants";
 import {Card, Spinner} from "react-bootstrap";
 import _ from "lodash";
@@ -47,7 +46,7 @@ class LandingPageContainer extends Component {
                     <Card.Body>
                         <Card.Title>{b.title.substring(0,50)}...</Card.Title>
                         <Card.Text>{b.description.substring(0,100)}...</Card.Text>
-                        <Link to={`/${b.coursePermaLink}/${b.subjectPermaLink}/${b.permaLink}`} style={{position: "absolute", bottom: "10px", right: "25px"}}>Read More</Link>
+                        <a href={`/${b.coursePermaLink}/${b.subjectPermaLink}/${b.permaLink}`} style={{position: "absolute", bottom: "10px", right: "25px"}}>Read More</a>
                     </Card.Body>
                 </Card>
             );
